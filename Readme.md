@@ -11,7 +11,7 @@ Animated WebP を読み込むために開発した AviUtl 用入力プラグイ�
 
 ## 注意点
 - 導入後、以下のような汎用プラグインより優先度を高くすることを推奨します。
-    * L-SMASH Works File Reader
+    * L-SMASH Works File Reader (InputPipePlugin)
     * DirectShow File Reader
     * MFVideoReader
     * FFmpeg Decoder
