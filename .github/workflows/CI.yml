@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build-msvc:
+    runs-on: windows-latest
+    env:
+      CMAKE_PREFIX_PATH: ${{ github.workspace }}/wi
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: 'recursive'
+
+    - uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Install libwebp
+      run: |
+        cd ${{ github.workspace }}
+        git clone https://github.com/webmproject/libwebp.git -b v1.5.0 --depth 1
+        cd libwebp
+        cmake -B build -S . -DCMAKE_GENERATOR_PLATFORM=Win32 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/wi -DBUILD_SHARED_LIBS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_LIBWEBPMUX=OFF
+        cmake --build build --config Release
+        cmake --install build --config Release
+
+    - name: Build
+      run: |
+        cd ${{ github.workspace }}
+        cmake -B build -S . -DCMAKE_GENERATOR_PLATFORM=Win32 -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --config Release
+
+    - name: Create Archive
+      shell: pwsh
+      run: |
+        cd ${{ github.workspace }}
+        mkdir pub
+        mkdir pub/Lisences
+        mv libwebp/COPYING pub/Lisences/libwebp.txt
+        mv src/aviutl_exedit_sdk/LICENSE pub/Lisences/aviutl_exedit_sdk.txt
+        mv Readme.md pub
+        mv LICENSE.txt pub
+        mv build/Release/webpinput.aui pub
+        cd pub
+        7z a webpinput.zip *
+
+    - name: Create a Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        $REVCOUNT=git rev-list --count HEAD
+        $RELEASE_NAME="r${REVCOUNT}"
+        $TAG_NAME="r${REVCOUNT}"
+        gh release create "${TAG_NAME}" ${{ github.workspace }}/pub/*.zip -t "${RELEASE_NAME}"
