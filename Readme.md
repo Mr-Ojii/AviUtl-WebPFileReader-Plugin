@@ -5,7 +5,7 @@ Animated WebP を読み込むために開発した AviUtl 用入力プラグイ�
 1. Visual C++ 再頒布可能パッケージ 2015-2022 X86 の導入
 2. Releases から最新の zip を DL
 3. zip を解凍
-4. 中に入っている webpinput.aui を以下に配置
+4. 中に入っている webpinput.aui を以下のいずれかに配置
     - aviutl.exe と同一のディレクトリ内
     - aviutl.exe と同一のディレクトリに配置されている plugins ディレクトリ内
 
