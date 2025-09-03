@@ -25,7 +25,7 @@ jobs:
     - name: Install libwebp
       run: |
         cd ${{ github.workspace }}
-        git clone https://github.com/webmproject/libwebp.git -b v1.5.0 --depth 1
+        git clone https://github.com/webmproject/libwebp.git -b v1.6.0 --depth 1
         cd libwebp
         cmake -B build -S . -DCMAKE_GENERATOR_PLATFORM=Win32 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/wi -DBUILD_SHARED_LIBS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF -DWEBP_BUILD_LIBWEBPMUX=OFF
         cmake --build build --config Release
