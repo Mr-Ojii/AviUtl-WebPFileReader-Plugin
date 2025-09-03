@@ -18,7 +18,22 @@ AviUtl::InputPluginDLL input_plugin {
     .func_is_keyframe = func_is_keyframe,
 };
 
-extern "C" AviUtl::InputPluginDLL* __stdcall GetInputPluginTable() { return &input_plugin; }
+extern "C" AviUtl::InputPluginDLL* __stdcall GetInputPluginTable() {
+    char exe_path[MAX_PATH * 2];
+    if ( GetModuleFileNameA( NULL, exe_path, sizeof(exe_path) ) ) {
+        char* p = exe_path;
+        while(*p != '\0')
+                p++;
+        while(*p != '\\')
+                p--;
+        p++;
+        if ( strcmp( p, "pipe32aui.exe" ) == 0 ) {
+            MessageBoxA( HWND_DESKTOP, "Use webpinput.aui with AviUtl ExEdit2 is deprecated.\nUse webpinput.aui2 instead.", "webpinput", MB_OK );
+        }
+    }
+
+    return &input_plugin;
+}
 
 AviUtl::InputHandle func_open(const char* path) {
     FileHandle fh(path);
