@@ -42,9 +42,9 @@ jobs:
       run: |
         cd ${{ github.workspace }}
         mkdir pub
-        mkdir pub/Lisences
-        mv libwebp/COPYING pub/Lisences/libwebp.txt
-        mv src/aviutl_exedit_sdk/LICENSE pub/Lisences/aviutl_exedit_sdk.txt
+        mkdir pub/Licenses
+        mv libwebp/COPYING pub/Licenses/libwebp.txt
+        mv src/aviutl_exedit_sdk/LICENSE pub/Licenses/aviutl_exedit_sdk.txt
         mv Readme.md pub
         mv LICENSE.txt pub
         mv build/Release/webpinput.aui pub
